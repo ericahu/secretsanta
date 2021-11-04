@@ -5,10 +5,10 @@
 
         <meta charset="utf-8" />
         <meta name="robots" content="noindex">
-        <title>Secret Santa Pairing</title>
+        <title>Secret Santa Wishlist</title>
 
-        <script src="vendors/Lodash-3.10.1.js"></script>
-        <script src="vendors/Cryptojs.aes-3.1.2.js"></script>
+        <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+        <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
 
         <style>
 
@@ -26,7 +26,7 @@
             }
 
             body {
-                background: url(./assets/snow.png), url(./assets/santa.png), url(./assets/snow.png), radial-gradient(#FB3B3B, #EF3D3D);
+                background: url(https://raw.githubusercontent.com/ericahu/secretsanta/gh-pages/assets/snow.png), url(https://raw.githubusercontent.com/ericahu/secretsanta/gh-pages/assets/santa.png), url(https://raw.githubusercontent.com/ericahu/secretsanta/gh-pages/assets/snow.png), radial-gradient(#FB3B3B, #EF3D3D);
                 background-repeat: repeat, no-repeat, repeat, no-repeat;
 
                 animation-name: snow;
@@ -125,20 +125,6 @@
             }
 
         </style>
-
-        <script>
-
-            var queryString = _.chain( location.search.slice( 1 ).split( /&/g ) )
-                .map( function ( item ) { if ( item ) return item.split( /=/ ).map( function ( str ) { return decodeURIComponent( str ); } ); } )
-                .compact().object().value();
-
-            var name = queryString.name;
-
-            var pairing = CryptoJS.AES.decrypt( queryString.pairing, queryString.key ).toString(CryptoJS.enc.Utf8);
-            var pairingDefinition = pairing.match( /^([^(]+)(?: (\([^)]+\)))?$/ );
-
-        </script>
-
     </head>
 
     <body>
@@ -146,50 +132,33 @@
         <div class="main">
 
             <div class="wrapper">
+                <div id="wishListResponses" style="visibility: hidden">
+                    "DUMMY"
+                </div>
                 <div class="content">
-
-                    <div class="title">Hi <span id="name"></span>! You've been paired with</div>
-                    <script>document.getElementById('name').innerText = name</script>
-
-                    <div class="pairing">
-                        <div id="pairing-name"></div>
-                        <div id="pairing-details"></div>
-                        <script>
-                            document.getElementById('pairing-name').innerText = pairingDefinition[1];
-
-                            if (pairingDefinition[2]) {
-                                document.getElementById('pairing-details').innerText = pairingDefinition[2];
-                            } else {
-                                document.getElementById('pairing-details').style.display = 'none';
-                            }
-                        </script>
+                 
+                    <div>
+                      WishListData
                     </div>
-                    <br/>
-
-                    <div class="title"><b>
-                        <a href="https://script.google.com/macros/s/AKfycbycqzwJrDf9nrbXQdGGAfUb-XDIvjPW__wFP_e44NzSXByvYDnMCnp865_zvQLNURNg/exec">
-                            🌟 Wishlist 🌟
-                        </a>
-                    </b></div>
-
-                    <br/>
-                    <div class="title">Good luck!</div>
-
-                    <script>
-                        if (queryString.extra) {
-                            document.write('<iframe class="affiliate" src="http://rcm-eu.amazon-adsystem.com/e/cm?t=secrsant02e-21&o=8&p=48&l=ur1&category=books&banner=10DQAXJ7D1D2VTXMR682&f=ifr" width="728" height="90" scrolling="no" border="0" marginwidth="0" frameborder="0"></iframe>');
-                        }
-                    </script>
-
+                    <div id="tables" width="400" height="400"></div>
                 </div>
             </div>
-
-            <a href="http://ericahu.github.io/secretsanta/" class="spirit-of-christmas">
-                Want to start your own Secret Santa with your friends? Click here to get started!
-            </a>
-
         </div>
 
     </body>
 
+<script>
+  const people = document.getElementById("wishListResponses").textContent;
+  console.log(people)
+  
+  new gridjs.Grid({
+    data: [
+      ["Anna", people["Anna"]["What do you want?"], "(353) 01 222 3333"],
+      ["Mark", "mark@gmail.com", "(01) 22 888 4444"],
+      ["Eoin", "eoin@gmail.com", "0097 22 654 00033"],
+      ["Sarah", "sarahcdd@gmail.com", "+322 876 1233"],
+      ["Afshin", "afshin@mail.com", "(353) 22 87 8356"]
+    ]
+  }).render(document.getElementById("tables"));
+</script>
 </html>
